@@ -1,5 +1,5 @@
 <?php
-    include_once("Config.php");
+    include_once("config/config.php");
 ?>
 <!DOCTYPE html>
 <html lang="en" class="loading">
@@ -12,7 +12,7 @@
     <meta name="description" content="Apex admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Apex admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
-    <title>Login Page - Apex responsive bootstrap 4 admin template</title>
+    <title>Dashboard - CMS eCommerce</title>
     <link rel="apple-touch-icon" sizes="60x60" href="app-assets/img/ico/apple-icon-60.html">
     <link rel="apple-touch-icon" sizes="76x76" href="app-assets/img/ico/apple-icon-76.html">
     <link rel="apple-touch-icon" sizes="120x120" href="app-assets/img/ico/apple-icon-120.html">
@@ -40,50 +40,31 @@
     <!-- END Custom CSS-->
   </head>
 
-  <?php
-
-if (isset($_REQUEST['btnLogin'])) 
-{
-
-    if($_REQUEST['txtUsername']=='bhaskar' && $_REQUEST['txtTrainNo']==12905)
-    {
-        $Select="select * from tblloginmaster where UserName='".$_REQUEST['txtUsername']."' and Password='".$_REQUEST['txtPassword']."'";
-        $Select_res=mysqli_query($con,$Select) or die(mysqli_error($con));
-        if(mysqli_num_rows($Select_res)>0)
+<!-- Php Login Code Admin -->
+<?php
+        if(isset($_REQUEST['btnLogin']))
         {
-
-            $result=mysqli_fetch_array($Select_res);
-            $_SESSION["UserName"]=$result["UserName"];
-            $_SESSION["IsVerified"]=$result["IsVerified"];
-            $CIDD=$_REQUEST['txtTrainNo'];
-            header("location:Coach.php?CID=$CIDD");
-            
-        }  
-        else
-        {
-            ?>
-            <script type="text/javascript" id="error">alert('Invalid Username / Password');</script>
-        <?php
-
-        } 
-    }
-    
-    
-    else
-    {
-        ?>
-        <script type="text/javascript" id="error">alert('Required fields cann\'t be empty.');</script>
-    <?php
-
-    }
-
-
-
-
-        //header("location:Coach.php");
-}
-
+            $str="select * from admin where email='".$_REQUEST['txtEmail']."' and password='".base64_encode($_REQUEST['txtPassword'])."'";
+            $rs=mysqli_query($con,$str) or die(mysqli_error());
+            if(mysqli_num_rows($rs)>0)
+            {
+                $res=mysqli_fetch_array($rs);
+                $_SESSION["adminID"]=$res["adminID"];
+                $_SESSION["firstName"]=$res["firstName"];
+                $_SESSION["lastName"]=$res["lastName"];
+                $_SESSION["email"]=$res["email"];    
+                header("Location:dashboard/");            
+            }
+            else
+            {
+?>            
+                <script type="text/javascript" id="error">alert('Invalid Email / Password');</script>
+<?php
+            }
+        }
 ?>
+
+<!-- End Php Login Code Admin -->
 
   <body data-col="1-column" class=" 1-column  blank-page blank-page">
     <!-- ////////////////////////////////////////////////////////////////////////////-->
@@ -105,17 +86,17 @@ if (isset($_REQUEST['btnLogin']))
                                         <form method="post">
                                             <div class="form-group">
                                                 <div class="col-md-12">
-                                                    <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Email" required >
-                                                </div><label id="lblEmail1" style="color: red"></label>
+                                                    <input type="email" class="form-control" name="txtEmail" id="txtEmail" placeholder="Email" required >
+                                                </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="col-md-12">
-                                                    <input type="password" class="form-control" name="inputPass" id="inputPass" placeholder="Password" required>
-                                                </div><label id="lblEmail1" style="color: red"></label>
+                                                    <input type="password" class="form-control" name="txtPassword" id="txtPassword" placeholder="Password" required>
+                                                </div>
                                             </div>
 
-                                            <!-- <div class="form-group">
+                                            <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
@@ -125,13 +106,13 @@ if (isset($_REQUEST['btnLogin']))
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <br><br>
                                             <hr>
                                             <div class="form-group">
                                                 <div class="col-md-12">
-                                                    <input type="submit" class="btn btn-pink btn-block btn-raised" id="btnLogin" name="btnLogin" value="Login">Submit</input>
-                                                    <button type="button" class="btn btn-secondary btn-block btn-raised">Cancel</button>
+                                                    <input type="submit" class="btn btn-pink btn-block btn-raised" id="btnLogin" name="btnLogin" value="Login"></input>
+                                                    <button type="reset" class="btn btn-secondary btn-block btn-raised">Cancel</button>
                                                 </div>
                                             </div>
                                         </form>
